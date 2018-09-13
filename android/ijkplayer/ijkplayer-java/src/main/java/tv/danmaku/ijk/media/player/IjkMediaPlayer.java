@@ -1280,8 +1280,29 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
             return bestCodec.mCodecInfo.getName();
         }
     }
+    
+    @Override
+    public  int startRecord(String file)
+    {
+	_startRecord(file);	
+    }
+
+    @Override
+    public  int stopRecord()
+    {
+
+    }
+
+   @Override
+    public  boolean getCurrentFrame(Bitmap bitmap)
+    {
+	
+    }
 
     public static native void native_profileBegin(String libName);
     public static native void native_profileEnd();
     public static native void native_setLogLevel(int level);
+    public native int _startRecord(String file);
+    public native int _stopRecord();
+    public native boolean _getCurrentFrame(Bitmap bitmap);
 }

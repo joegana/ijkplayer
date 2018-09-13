@@ -212,4 +212,9 @@ public interface IMediaPlayer {
      * AndroidMediaPlayer: M:
      */
     void setDataSource(IMediaDataSource mediaDataSource);
+
+    public  int startRecord(String file);
+    public  int stopRecord();
+    public  boolean getCurrentFrame(Bitmap bitmap);
+    
 }
