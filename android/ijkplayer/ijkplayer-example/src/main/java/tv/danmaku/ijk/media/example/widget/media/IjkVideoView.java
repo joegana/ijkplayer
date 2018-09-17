@@ -21,6 +21,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -48,6 +49,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import tv.danmaku.ijk.media.example.activities.EZUtils;
+import tv.danmaku.ijk.media.example.activities.MediaScanner;
 import tv.danmaku.ijk.media.exo.IjkExoMediaPlayer;
 import tv.danmaku.ijk.media.player.AndroidMediaPlayer;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
@@ -800,7 +803,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
 
     @Override
     public void start() {
-        if (isInPlaybackState()) {
+        if (isInPlaybackState() && !mMediaPlayer.isPlaying() ) {
             mMediaPlayer.start();
             mCurrentState = STATE_PLAYING;
         }
@@ -1035,42 +1038,57 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                 IjkMediaPlayer ijkMediaPlayer = null;
                 if (mUri != null) {
                     ijkMediaPlayer = new IjkMediaPlayer();
-                    ijkMediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
+                    ijkMediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_VERBOSE);
 
-                    if (mSettings.getUsingMediaCodec()) {
-                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
-                        if (mSettings.getUsingMediaCodecAutoRotate()) {
-                            ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
-                        } else {
-                            ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 0);
-                        }
-                        if (mSettings.getMediaCodecHandleResolutionChange()) {
-                            ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
-                        } else {
-                            ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 0);
-                        }
-                    } else {
-                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 0);
-                    }
+//                    if (mSettings.getUsingMediaCodec()) {
+//                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
+//                        if (mSettings.getUsingMediaCodecAutoRotate()) {
+//                            ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
+//                        } else {
+//                            ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 0);
+//                        }
+//                        if (mSettings.getMediaCodecHandleResolutionChange()) {
+//                            ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
+//                        } else {
+//                            ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 0);
+//                        }
+//                    } else {
+//                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 0);
+//                    }
 
-                    if (mSettings.getUsingOpenSLES()) {
-                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", 1);
-                    } else {
-                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", 0);
-                    }
+//                    if (mSettings.getUsingOpenSLES()) {
+//                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", 1);
+//                    } else {
+//                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", 0);
+//                    }
+//
+//                    String pixelFormat = mSettings.getPixelFormat();
+//                    if (TextUtils.isEmpty(pixelFormat)) {
+//                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", IjkMediaPlayer.SDL_FCC_RV32);
+//                    } else {
+//                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", pixelFormat);
+//                    }
+//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1);
+//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 0);
+//
+//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
+//
+//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
 
-                    String pixelFormat = mSettings.getPixelFormat();
-                    if (TextUtils.isEmpty(pixelFormat)) {
-                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", IjkMediaPlayer.SDL_FCC_RV32);
-                    } else {
-                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", pixelFormat);
-                    }
-                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1);
-                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 0);
 
-                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
-
+//                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 0);
+                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 60);
+                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "max-fps", 0);
+                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "fps", 30);
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
+                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", IjkMediaPlayer.SDL_FCC_RV32);
+                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "packet-buffering", 0);
+                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "fflags", "nobuffer");
+                      ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "max-buffer-size", 1024);
+                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "min-frames", 3);
+                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 1);
+                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "probsize", "4096");
+                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "analyzeduration", "2000000");
                 }
                 mediaPlayer = ijkMediaPlayer;
             }
@@ -1257,5 +1275,54 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
 
     public int getSelectedTrack(int trackType) {
         return MediaPlayerCompat.getSelectedTrack(mMediaPlayer, trackType);
+    }
+
+
+    //截图
+    public void snapshotPicture() {
+        try {
+        int width = mMediaPlayer.getVideoWidth();
+        int height = mMediaPlayer.getVideoHeight();
+        Bitmap srcBitmap = Bitmap.createBitmap(width,
+                height, Bitmap.Config.ARGB_8888);
+        boolean flag = mMediaPlayer.getCurrentFrame(srcBitmap);
+        if (flag) {
+            // 保存图片
+            String path = EZUtils.generateCaptureFilePath("","vlc-snapshot","" );
+            if (TextUtils.isEmpty(path)) {
+                srcBitmap.recycle();
+                srcBitmap = null;
+                return;
+            }
+            path += ".jpg";
+            Log.v("test","path :" + path);
+            EZUtils.saveCapturePictrue(path, "", srcBitmap);
+            MediaScanner mMediaScanner = new MediaScanner(mAppContext);
+            mMediaScanner.scanFile(path, "jpg");
+
+
+        }
+        }catch (Exception e)
+        {
+
+        }
+    }
+
+    private String mVideoPath ;
+    //开始录像
+    public void startRecord() {
+        if (mMediaPlayer != null) {
+            mVideoPath  = EZUtils.generateCaptureFilePath("","vlc-snapshot","" ) + ".mp4";
+            mMediaPlayer.startRecord(mVideoPath);
+        }
+    }
+
+    //结束录像
+    public void stopRecord() {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stopRecord();
+            MediaScanner mMediaScanner = new MediaScanner(mAppContext);
+            mMediaScanner.scanFile(mVideoPath, "mp4");
+        }
     }
 }

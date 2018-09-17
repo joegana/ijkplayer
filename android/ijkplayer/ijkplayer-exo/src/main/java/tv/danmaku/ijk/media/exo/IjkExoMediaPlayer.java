@@ -18,6 +18,7 @@
 package tv.danmaku.ijk.media.exo;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -42,6 +43,7 @@ import tv.danmaku.ijk.media.player.misc.IjkTrackInfo;
 
 public class IjkExoMediaPlayer extends AbstractMediaPlayer {
     private Context mAppContext;
+
     private DemoPlayer mInternalPlayer;
     private EventLogger mEventLogger;
     private String mDataSource;
@@ -300,6 +302,21 @@ public class IjkExoMediaPlayer extends AbstractMediaPlayer {
             return 0;
 
         return mInternalPlayer.getBufferedPercentage();
+    }
+
+    @Override
+    public int startRecord(String file) {
+        throw new UnsupportedOperationException("no support");
+    }
+
+    @Override
+    public int stopRecord() {
+        throw new UnsupportedOperationException("no support");
+    }
+
+    @Override
+    public boolean getCurrentFrame(Bitmap bitmap) {
+        throw new UnsupportedOperationException("no support");
     }
 
     private RendererBuilder getRendererBuilder() {

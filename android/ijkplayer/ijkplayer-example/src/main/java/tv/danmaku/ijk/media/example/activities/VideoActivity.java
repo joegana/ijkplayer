@@ -92,6 +92,7 @@ public class VideoActivity extends AppCompatActivity implements TracksFragment.I
                 mVideoPath = intent.getDataString();
             } else if (intentAction.equals(Intent.ACTION_SEND)) {
                 mVideoUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+//                mVideoUri = Uri.parse("rtsp:admin:Beward123@192.168.0.250:554/av0_0");
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                     String scheme = mVideoUri.getScheme();
                     if (TextUtils.isEmpty(scheme)) {
@@ -113,7 +114,9 @@ public class VideoActivity extends AppCompatActivity implements TracksFragment.I
                 }
             }
         }
-
+      mVideoPath = "rtsp://admin:Beward123@192.168.0.250:554/av0_0";
+//         mVideoPath = "rtsp://180.168.116.75:554/user=admin&password=&channel=1&stream=0.sdp ";
+        mVideoPath = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";
         if (!TextUtils.isEmpty(mVideoPath)) {
             new RecentMediaStorage(this).saveUrlAsync(mVideoPath);
         }
@@ -196,13 +199,16 @@ public class VideoActivity extends AppCompatActivity implements TracksFragment.I
             mMediaController.showOnce(mToastTextView);
             return true;
         } else if (id == R.id.action_toggle_render) {
-            int render = mVideoView.toggleRender();
-            String renderText = IjkVideoView.getRenderText(this, render);
-            mToastTextView.setText(renderText);
-            mMediaController.showOnce(mToastTextView);
+//            int render = mVideoView.toggleRender();
+//            String renderText = IjkVideoView.getRenderText(this, render);
+//            mToastTextView.setText(renderText);
+//            mMediaController.showOnce(mToastTextView);
+//              mVideoView.snapshotPicture();
+             mVideoView.startRecord();
             return true;
         } else if (id == R.id.action_show_info) {
-            mVideoView.showMediaInfo();
+//            mVideoView.showMediaInfo();
+//             mVideoView.stopRecord();
         } else if (id == R.id.action_show_tracks) {
             if (mDrawerLayout.isDrawerOpen(mRightDrawer)) {
                 Fragment f = getSupportFragmentManager().findFragmentById(R.id.right_drawer);

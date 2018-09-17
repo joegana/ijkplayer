@@ -1,0 +1,40 @@
+---- ijkmp_set_option Matches (3 in 3 files) ----
+Ijkplayer.c (ijkmedia\ijkplayer):void ijkmp_set_option(IjkMediaPlayer *mp, int opt_category, const char *name, const char *value)
+Ijkplayer.h (ijkmedia\ijkplayer):void            ijkmp_set_option(IjkMediaPlayer *mp, int opt_category, const char *name, const char *value);
+Ijkplayer_jni.c (ijkmedia\ijkplayer\android):    ijkmp_set_option(mp, category, c_name, c_value);
+---- start-on-prepared Matches (3 in 2 files) ----
+Ff_ffplay_options.h (ijkmedia\ijkplayer):    { "start-on-prepared",                  "automatically start playing on prepared",
+IjkVideoView.java (android\ijkplayer\ijkplayer-example\src\main\java\tv\danmaku\ijk\media\example\widget\media)://                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 0);
+IjkVideoView.java (android\ijkplayer\ijkplayer-example\src\main\java\tv\danmaku\ijk\media\example\widget\media):                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 1);
+---- framedrop Matches (16 in 5 files) ----
+Ffpipenode_android_mediacodec_vdec.c (ijkmedia\ijkplayer\android\pipeline):        if (ffp->framedrop > 0 || (ffp->framedrop && ffp_get_master_sync_type(is) != AV_SYNC_VIDEO_MASTER)) {
+Ffpipenode_android_mediacodec_vdec.c (ijkmedia\ijkplayer\android\pipeline):                    if (is->continuous_frame_drops_early > ffp->framedrop) {
+Ffpipenode_android_mediacodec_vdec.c (ijkmedia\ijkplayer\android\pipeline):            if (ffp->framedrop > 0 || (ffp->framedrop && ffp_get_master_sync_type(is) != AV_SYNC_VIDEO_MASTER)) {
+Ffpipenode_android_mediacodec_vdec.c (ijkmedia\ijkplayer\android\pipeline):                        if (is->continuous_frame_drops_early > ffp->framedrop) {
+Ff_ffplay.c (ijkmedia\ijkplayer):                if(!is->step && (ffp->framedrop > 0 || (ffp->framedrop && get_master_sync_type(is) != AV_SYNC_VIDEO_MASTER)) && time > is->frame_timer + duration) {
+Ff_ffplay.c (ijkmedia\ijkplayer):        if (ffp->framedrop>0 || (ffp->framedrop && get_master_sync_type(is) != AV_SYNC_VIDEO_MASTER)) {
+Ff_ffplay.c (ijkmedia\ijkplayer):                    if (is->continuous_frame_drops_early > ffp->framedrop) {
+Ff_ffplay_def.h (ijkmedia\ijkplayer):static int framedrop = -1;
+Ff_ffplay_def.h (ijkmedia\ijkplayer):    int framedrop;
+Ff_ffplay_def.h (ijkmedia\ijkplayer):    ffp->framedrop              = 0; // option
+Ff_ffplay_options.h (ijkmedia\ijkplayer):    { "framedrop",                      "drop frames when cpu is too slow",
+Ff_ffplay_options.h (ijkmedia\ijkplayer):        OPTION_OFFSET(framedrop),       OPTION_INT(0, -1, 120) },
+IjkVideoView.java (android\ijkplayer\ijkplayer-example\src\main\java\tv\danmaku\ijk\media\example\widget\media)://                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1);
+IjkVideoView.java (android\ijkplayer\ijkplayer-example\src\main\java\tv\danmaku\ijk\media\example\widget\media):                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1);
+---- reconnect Matches (9 in 3 files) ----
+Ijkiomanager.c (ijkmedia\ijkplayer\ijkavformat):    av_log(NULL, AV_LOG_INFO, "ijkio manager immediate reconnect\n");
+Ijkiourlhook.c (ijkmedia\ijkplayer\ijkavformat):        av_log(NULL, AV_LOG_INFO, "%s: will reconnect at start\n", __func__);
+Ijkiourlhook.c (ijkmedia\ijkplayer\ijkavformat):        av_log(NULL, AV_LOG_INFO, "%s: did reconnect at start: %d\n", __func__, ret);
+Ijkiourlhook.c (ijkmedia\ijkplayer\ijkavformat):        av_log(NULL, AV_LOG_INFO, "%s: will reconnect(%d) at %"PRId64"\n", __func__, c->app_io_ctrl.retry_counter, c->logical_pos);
+Ijkiourlhook.c (ijkmedia\ijkplayer\ijkavformat):        av_log(NULL, AV_LOG_INFO, "%s: did reconnect(%d) at %"PRId64": %d\n", __func__, c->app_io_ctrl.retry_counter, c->logical_pos, ret);
+Ijkurlhook.c (ijkmedia\ijkplayer\ijkavformat):        av_log(h, AV_LOG_INFO, "%s: will reconnect at start\n", __func__);
+Ijkurlhook.c (ijkmedia\ijkplayer\ijkavformat):        av_log(h, AV_LOG_INFO, "%s: did reconnect at start: %d\n", __func__, ret);
+Ijkurlhook.c (ijkmedia\ijkplayer\ijkavformat):        av_log(h, AV_LOG_INFO, "%s: will reconnect(%d) at %"PRId64"\n", __func__, c->app_io_ctrl.retry_counter, c->logical_pos);
+Ijkurlhook.c (ijkmedia\ijkplayer\ijkavformat):        av_log(h, AV_LOG_INFO, "%s: did reconnect(%d) at %"PRId64": %d\n", __func__, c->app_io_ctrl.retry_counter, c->logical_pos, ret);
+---- skip_loop_filter Matches (6 in 3 files) ----
+Ff_ffplay.c (ijkmedia\ijkplayer):            avctx->skip_loop_filter = FFMAX(avctx->skip_loop_filter, AVDISCARD_NONREF);
+Ff_ffplay.c (ijkmedia\ijkplayer):            avctx->skip_idct        = FFMAX(avctx->skip_loop_filter, AVDISCARD_NONREF);
+IJKFFOptions.h (ios\ijkmediaplayer\ijkmediaplayer):// for codec option 'skip_loop_filter' and 'skip_frame'
+IjkVideoView.java (android\ijkplayer\ijkplayer-example\src\main\java\tv\danmaku\ijk\media\example\widget\media)://                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
+IjkVideoView.java (android\ijkplayer\ijkplayer-example\src\main\java\tv\danmaku\ijk\media\example\widget\media):                    ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
+---- circular_buffer_size Matches (0 in 0 files) ----

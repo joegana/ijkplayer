@@ -19,6 +19,7 @@ package tv.danmaku.ijk.media.player;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.view.Surface;
@@ -335,5 +336,21 @@ public class MediaPlayerProxy implements IMediaPlayer {
     @Override
     public boolean isLooping() {
         return mBackEndMediaPlayer.isLooping();
+    }
+
+
+    @Override
+    public int startRecord(String file) {
+        return mBackEndMediaPlayer.startRecord(file);
+    }
+
+    @Override
+    public int stopRecord() {
+        return mBackEndMediaPlayer.stopRecord();
+    }
+
+    @Override
+    public boolean getCurrentFrame(Bitmap bitmap) {
+        return mBackEndMediaPlayer.getCurrentFrame(bitmap);
     }
 }
