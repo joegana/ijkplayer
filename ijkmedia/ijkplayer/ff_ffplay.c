@@ -2318,6 +2318,17 @@ static int ffplay_video_thread(void *arg)
             duration = (frame_rate.num && frame_rate.den ? av_q2d((AVRational){frame_rate.den, frame_rate.num}) : 0);
             pts = (frame->pts == AV_NOPTS_VALUE) ? NAN : frame->pts * av_q2d(tb);
             ret = queue_picture(ffp, frame, pts, duration, frame->pkt_pos, is->viddec.pkt_serial);
+			
+			if (!ffp->is_first && pkt->pts == pkt->dts) { // 获取开始录制前dts等于pts最后的值，用于
+					ffp->start_pts = pkt->pts;
+			       ffp->start_dts = pkt->dts;
+			}
+			if (ffp->is_record) { // 可以录制时，写入文件
+			   if (0 != ffp_record_file(ffp, pkt)) {
+				   ffp->record_error = 1;
+				   ffp_stop_record(ffp);
+			   }
+			}
             av_frame_unref(frame);
 #if CONFIG_AVFILTER
         }
