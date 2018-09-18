@@ -217,5 +217,4 @@ public interface IMediaPlayer {
     int startRecord(String file);
     int stopRecord();
     boolean getCurrentFrame(Bitmap bitmap);
-    
 }
