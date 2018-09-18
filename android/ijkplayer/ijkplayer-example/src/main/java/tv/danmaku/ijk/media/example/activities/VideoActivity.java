@@ -208,7 +208,7 @@ public class VideoActivity extends AppCompatActivity implements TracksFragment.I
             return true;
         } else if (id == R.id.action_show_info) {
 //            mVideoView.showMediaInfo();
-//             mVideoView.stopRecord();
+             mVideoView.stopRecord();
         } else if (id == R.id.action_show_tracks) {
             if (mDrawerLayout.isDrawerOpen(mRightDrawer)) {
                 Fragment f = getSupportFragmentManager().findFragmentById(R.id.right_drawer);

@@ -1311,18 +1311,33 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
     private String mVideoPath ;
     //开始录像
     public void startRecord() {
-        if (mMediaPlayer != null) {
-            mVideoPath  = EZUtils.generateCaptureFilePath("","vlc-snapshot","" ) + ".mp4";
-            mMediaPlayer.startRecord(mVideoPath);
-        }
+        new Thread()
+        {
+            @Override
+            public void run() {
+                if (mMediaPlayer != null) {
+                    mVideoPath  = EZUtils.generateCaptureFilePath("","vlc-snapshot","" ) + ".mp4";
+                    int start =  mMediaPlayer.startRecord(mVideoPath);
+                    Log.d(TAG,start == 0?"Record start success":"Record start failed.");
+                }
+            }
+        }.start();
+
     }
 
     //结束录像
     public void stopRecord() {
-        if (mMediaPlayer != null) {
-            mMediaPlayer.stopRecord();
-            MediaScanner mMediaScanner = new MediaScanner(mAppContext);
-            mMediaScanner.scanFile(mVideoPath, "mp4");
-        }
+        new Thread()
+        {
+            @Override
+            public void run() {
+                if (mMediaPlayer != null) {
+                    int ret  =  mMediaPlayer.stopRecord();
+                    Log.d(TAG,ret == 0?"Record stop success":"Record stop failed.");
+                    MediaScanner mMediaScanner = new MediaScanner(mAppContext);
+                    mMediaScanner.scanFile(mVideoPath, "mp4");
+                }
+            }
+        }.start();
     }
 }

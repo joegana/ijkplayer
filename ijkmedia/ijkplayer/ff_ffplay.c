@@ -5121,6 +5121,59 @@ end:
     return -1;
 }
 
+
+int ffp_record_file(FFPlayer *ffp, AVPacket *packet)
+{
+    assert(ffp);
+    VideoState *is = ffp->is;
+    int ret = 0;
+    AVStream *in_stream;
+    AVStream *out_stream;
+    
+    if (ffp->is_record) {
+        if (packet == NULL) {
+            ffp->record_error = 1;
+            av_log(ffp, AV_LOG_ERROR, "packet == NULL");
+            return -1;
+        }
+        
+        AVPacket *pkt = (AVPacket *)av_malloc(sizeof(AVPacket)); // 与看直播的 AVPacket分开，不然卡屏
+        av_new_packet(pkt, 0);
+        if (0 == av_packet_ref(pkt, packet)) {
+            pthread_mutex_lock(&ffp->record_mutex);
+            
+            if (!ffp->is_first) { // 录制的第一帧，时间从0开始
+                ffp->is_first = 1;
+                pkt->pts = 0;
+                pkt->dts = 0;
+            } else { // 之后的每一帧都要减去，点击开始录制时的值，这样的时间才是正确的
+                pkt->pts = abs(pkt->pts - ffp->start_pts);
+                pkt->dts = abs(pkt->dts - ffp->start_dts);
+            }
+
+            in_stream  = is->ic->streams[pkt->stream_index];
+            out_stream = ffp->m_ofmt_ctx->streams[pkt->stream_index];
+            
+            // 转换PTS/DTS
+            pkt->pts = av_rescale_q_rnd(pkt->pts, in_stream->time_base, out_stream->time_base, (AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
+            pkt->dts = av_rescale_q_rnd(pkt->dts, in_stream->time_base, out_stream->time_base, (AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
+            pkt->duration = av_rescale_q(pkt->duration, in_stream->time_base, out_stream->time_base);
+            pkt->pos = -1;
+                  
+            // 写入一个AVPacket到输出文件
+            if ((ret = av_interleaved_write_frame(ffp->m_ofmt_ctx, pkt)) < 0) {
+                av_log(ffp, AV_LOG_ERROR, "Error muxing packet\n");
+            }
+            
+            av_packet_unref(pkt);
+            pthread_mutex_unlock(&ffp->record_mutex);            
+        } else {
+            av_log(ffp, AV_LOG_ERROR, "av_packet_ref == NULL");
+        }
+    }
+    return ret;
+}
+
 // Stop record ,save file 
 int ffp_stop_record(FFPlayer *ffp)
 {
@@ -5146,7 +5199,7 @@ int ffp_stop_record(FFPlayer *ffp)
     return 0;
 }
 
-// 截图
+
 void ffp_get_current_frame_l(FFPlayer *ffp, uint8_t *frame_buf)
 {
   ALOGD("=============>start snapshot\n");
