@@ -3620,6 +3620,16 @@ static int read_thread(void *arg)
                 }
             }
         }
+        if (!ffp->is_first && pkt->pts == pkt->dts) { // 获取开始录制前dts等于pts最后的值，用于
+	    ffp->start_pts = pkt->pts;
+	    ffp->start_dts = pkt->dts;
+	}
+    	if (ffp->is_record) { // 可以录制时，写入文件
+	   if (0 != ffp_record_file(ffp, pkt)) {
+	      ffp->record_error = 1;
+	      ffp_stop_record(ffp);
+	   }
+    	}
     }
 
     ret = 0;
