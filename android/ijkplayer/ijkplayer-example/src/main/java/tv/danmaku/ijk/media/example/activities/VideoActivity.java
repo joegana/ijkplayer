@@ -114,9 +114,9 @@ public class VideoActivity extends AppCompatActivity implements TracksFragment.I
                 }
             }
         }
-      mVideoPath = "rtsp://admin:Beward123@192.168.0.250:554/av0_0";
-//         mVideoPath = "rtsp://180.168.116.75:554/user=admin&password=&channel=1&stream=0.sdp ";
-        mVideoPath = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";
+//      mVideoPath = "rtsp://admin:Beward123@192.168.0.250:554/av0_0";
+//      mVideoPath = "rtsp://180.168.116.75:554/user=admin&password=&channel=1&stream=0.sdp ";
+//      mVideoPath = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";
         if (!TextUtils.isEmpty(mVideoPath)) {
             new RecentMediaStorage(this).saveUrlAsync(mVideoPath);
         }
