@@ -2,7 +2,7 @@ apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'maven-publish'
 
 def package_name = 'com.moorgen.video'
-def artifactVersion = '1.0.3'//release包发布的版本
+def artifactVersion = '1.0.4'//release包发布的版本
 
 def artifactory_user='justin'
 def artifactory_password='123456'
